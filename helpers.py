@@ -33,7 +33,6 @@ def load_features():
 		'capital_gains',
 		'capital_losses',
 		'dividends_from_stocks',
-		'weeks_worked_in_year',
 	]
 
 	cat_features = [
