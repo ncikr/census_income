@@ -1,4 +1,7 @@
-from helpers import load_data
+# from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+
+from helpers import load_data, load_features, load_transformers
 
 X_train, y_train = load_data(
     data_filepath="data/census_income_learn.csv",
@@ -9,3 +12,17 @@ X_test, y_test = load_data(
     data_filepath="data/census_income_test.csv",
     metadata_filepath="./data/census_income_metadata.txt",
 )
+
+num_features, cat_features = load_features()
+
+custom_transformers = load_transformers()
+
+pipeline = Pipeline(
+    steps=[
+        ("age_binning", custom_transformers["age"]),
+        ("wage_per_hour_binning", custom_transformers["wage_per_hour"]),
+        ("weeks_worked_in_year", custom_transformers["weeks_worked_in_year"]),
+    ]
+)
+
+pipeline.fit_transform(X_train)
