@@ -4,10 +4,10 @@ import numpy as np
 import pandas as pd
 from janitor import clean_names
 
-from custom_transformers import *
+from custom_transformers import CategoricalBinning, NumericBinning
 
 
-def load_data(data_filepath, metadata_filepath):
+def load_data(data_filepath, metadata_filepath, num_features, cat_features):
 	# load feature names from metadata
 	metadata_file = open(metadata_filepath, 'r')
 	metadata_lines = metadata_file.readlines()
@@ -21,6 +21,13 @@ def load_data(data_filepath, metadata_filepath):
 		.assign(income_threshold=lambda x: np.where(x['income_threshold'] == ' 50000+.', 1, 0))
 	)
 
+	# special treatment for 'other' in weeks_worked_in_year
+	# replace 'other' with 30 so it's binned in the 1-52 category
+	data['weeks_worked_in_year'] = data['weeks_worked_in_year'].replace('other', 30)
+
+	data[num_features] = data[num_features].astype('int')
+	data[cat_features] = data[cat_features].astype('str')
+
 	X = data.drop('income_threshold', axis=1)
 	Y = data['income_threshold']
 
@@ -30,13 +37,14 @@ def load_data(data_filepath, metadata_filepath):
 def load_features():
 	num_features = [
 		'age',
+		'wage_per_hour',
 		'capital_gains',
 		'capital_losses',
 		'dividends_from_stocks',
+		'weeks_worked_in_year',
 	]
 
 	cat_features = [
-		'age_binned',
 		'class_of_worker',
 		'detailed_industry_recode',
 		'detailed_occupation_recode',
@@ -45,7 +53,6 @@ def load_features():
 		'marital_stat',
 		'major_industry_code',
 		'major_occupation_code',
-		'wage_per_hour',
 		'race',
 		'hispanic_origin',
 		'sex',
@@ -68,7 +75,6 @@ def load_features():
 		'country_of_birth_self',
 		'citizenship',
 		'own_business_or_self_employed',
-		'weeks_worked_in_year',
 		'fill_inc_questionnaire_for_veterans_admin',
 		'veterans_benefits',
 	]
@@ -79,7 +85,7 @@ def load_features():
 def load_transformers():
 	transformers = dict()
 
-	# numerical
+	# numerical transformers
 
 	transformers['age'] = NumericBinning(
 		column='age',
@@ -102,7 +108,7 @@ def load_transformers():
 		overwrite=True,
 	)
 
-	# categorical
+	# categorical transformers
 
 	transformers['education'] = CategoricalBinning(
 		column='education',

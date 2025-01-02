@@ -12,6 +12,9 @@ class DropColumns(BaseEstimator, TransformerMixin):
 	def transform(self, X):
 		return X.drop(columns=self.columns_to_drop)
 
+	def set_output(self, transform='pandas'):
+		self.output = transform
+
 
 class CategoricalBinning(BaseEstimator, TransformerMixin):
 	"""
@@ -41,6 +44,9 @@ class CategoricalBinning(BaseEstimator, TransformerMixin):
 
 		return X
 
+	def set_output(self, transform='pandas'):
+		self.output = transform
+
 
 class NumericBinning(BaseEstimator, TransformerMixin):
 	"""
@@ -67,3 +73,6 @@ class NumericBinning(BaseEstimator, TransformerMixin):
 		X[col_name] = pd.cut(X[self.column], bins=self.bins, labels=self.labels, right=False)
 
 		return X
+
+	def set_output(self, transform='pandas'):
+		self.output = transform

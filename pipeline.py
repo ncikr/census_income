@@ -1,58 +1,76 @@
 # from sklearn.compose import ColumnTransformer
-from imblearn.over_sampling import SMOTE
+import numpy as np
 from imblearn.pipeline import Pipeline as ImbPipeline
-from sklearn.compose import ColumnTransformer
+from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.impute import SimpleImputer
-from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
+from custom_transformers import DropColumns
 from helpers import load_data, load_features, load_transformers
+
+num_features, cat_features = load_features()
 
 X_train, y_train = load_data(
 	data_filepath='data/census_income_learn.csv',
 	metadata_filepath='./data/census_income_metadata.txt',
+	num_features=num_features,
+	cat_features=cat_features,
 )
 
 X_test, y_test = load_data(
 	data_filepath='data/census_income_test.csv',
 	metadata_filepath='./data/census_income_metadata.txt',
+	num_features=num_features,
+	cat_features=cat_features,
 )
 
-num_features, cat_features = load_features()
+# set features to remove from data (based on EDA)
+cols_to_drop = [
+	'family_members_under_18',
+	'fill_inc_questionnaire_for_veterans_admin',
+	'instance_weight',
+	'year',
+]
 
+# load binning transformers
 custom_transformers = load_transformers()
 
-# build pipeline to bin features based on eda
-binning_pipeline = Pipeline(
-	steps=[
-		('age_binning', custom_transformers['age']),
-		('wage_per_hour_binning', custom_transformers['wage_per_hour']),
-		('weeks_worked_in_year', custom_transformers['weeks_worked_in_year']),
-		('education', custom_transformers['education']),
-		('marital_stat', custom_transformers['marital_stat']),
-		('race', custom_transformers['race']),
-		('reason_for_unemployment', custom_transformers['reason_for_unemployment']),
-		('full_or_part_time_employment_stat', custom_transformers['full_or_part_time_employment_stat']),
-		('citizenship', custom_transformers['citizenship']),
+binning = ColumnTransformer(
+	[(f'{feature}_binning', custom_transformers[feature], [feature]) for feature in custom_transformers],
+	remainder='passthrough',
+)
+
+# create separate imputing transformer to apply before binning
+imputer = ColumnTransformer(
+	[
+		('num_features', SimpleImputer(strategy='median'), make_column_selector(dtype_include=np.number)),
+		('cat_features', SimpleImputer(strategy='most_frequent'), make_column_selector(dtype_include=object)),
+	],
+	remainder='passthrough',
+	verbose_feature_names_out=False,  # to enable binning afterwards
+)
+
+# scaling and OHE
+preprocessing = ColumnTransformer(
+	[
+		('num_features', StandardScaler(), make_column_selector(dtype_include=np.number)),
+		(
+			'cat_features',
+			OneHotEncoder(handle_unknown='ignore', sparse_output=False),
+			make_column_selector(dtype_include=object),
+		),
 	]
 )
 
-# standard preprocessing
-num_pipeline = make_pipeline(SimpleImputer(strategy='median'), StandardScaler())
-
-cat_pipeline = make_pipeline(SimpleImputer(strategy='most_frequent'), OneHotEncoder(handle_unknown='ignore'))
-
-preprocessing = ColumnTransformer(
-	[('num_features', num_pipeline, num_features), ('cat_features', cat_pipeline, cat_features)]
-)
-
-# build pipeline with SMOTE
+# build pipeline
 pipeline = ImbPipeline(
 	steps=[
-		('binning', binning_pipeline),
-		('preprocessing', preprocessing),
-		('smote', SMOTE(random_state=42)),
-	]
-)
+		('drop_cols', DropColumns(cols_to_drop)),  # separate transformer for readability
+		('impute', imputer),  # impute before binning
+		('binning', binning),  # bin select variables to reduce likelihood of overfitting
+		('preprocessing', preprocessing),  # scaling and OHE
+		# ('smote', SMOTE(random_state=42)),
+	],
+).set_output(transform='pandas')  # required to enable column-based pre-processing after binning
 
-pipeline
+pipeline.fit_transform(X_train)
