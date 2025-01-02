@@ -7,7 +7,7 @@ from janitor import clean_names
 from custom_transformers import *
 
 
-def load_data(data_filepath, metadata_filepath):
+def load_data(data_filepath, metadata_filepath, num_features, cat_features):
 	# load feature names from metadata
 	metadata_file = open(metadata_filepath, 'r')
 	metadata_lines = metadata_file.readlines()
@@ -20,6 +20,9 @@ def load_data(data_filepath, metadata_filepath):
 		.pipe(clean_names)
 		.assign(income_threshold=lambda x: np.where(x['income_threshold'] == ' 50000+.', 1, 0))
 	)
+
+	data[num_features] = data[num_features].astype('int')
+	data[cat_features] = data[cat_features].astype('str')
 
 	X = data.drop('income_threshold', axis=1)
 	Y = data['income_threshold']
@@ -36,7 +39,6 @@ def load_features():
 	]
 
 	cat_features = [
-		'age_binned',
 		'class_of_worker',
 		'detailed_industry_recode',
 		'detailed_occupation_recode',
@@ -88,19 +90,19 @@ def load_transformers():
 		overwrite=False,
 	)
 
-	transformers['wage_per_hour'] = NumericBinning(
-		column='wage_per_hour',
-		bins=[0, 1, 500, float('inf')],
-		labels=['0', '0-500', '500+'],
-		overwrite=True,
-	)
+	# transformers['wage_per_hour'] = NumericBinning(
+	# 	column='wage_per_hour',
+	# 	bins=[0, 1, 500, float('inf')],
+	# 	labels=['0', '0-500', '500+'],
+	# 	overwrite=True,
+	# )
 
-	transformers['weeks_worked_in_year'] = NumericBinning(
-		column='weeks_worked_in_year',
-		bins=[0, 1, 51, float('inf')],
-		labels=['0', '0-52', '52'],
-		overwrite=True,
-	)
+	# transformers['weeks_worked_in_year'] = NumericBinning(
+	# 	column='weeks_worked_in_year',
+	# 	bins=[0, 1, 51, float('inf')],
+	# 	labels=['0', '0-52', '52'],
+	# 	overwrite=True,
+	# )
 
 	# categorical
 
