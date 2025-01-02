@@ -3,6 +3,10 @@ import re
 import numpy as np
 import pandas as pd
 from janitor import clean_names
+from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
+from xgboost import XGBClassifier
 
 from custom_transformers import CategoricalBinning, NumericBinning
 
@@ -237,3 +241,15 @@ def load_transformers():
 	)
 
 	return transformers
+
+
+def load_base_models():
+	models = {
+		'LogisticRegression': LogisticRegression(max_iter=1000, random_state=42),
+		'RandomForest': RandomForestClassifier(random_state=42),
+		'GradientBoosting': GradientBoostingClassifier(random_state=42),
+		'SVC': SVC(probability=True, random_state=42),
+		'XGBoost': XGBClassifier(use_label_encoder=False, eval_metric='logloss', random_state=42),
+	}
+
+	return models
