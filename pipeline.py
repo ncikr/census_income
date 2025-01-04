@@ -5,11 +5,10 @@ from imblearn.pipeline import Pipeline as ImbPipeline
 from imblearn.pipeline import make_pipeline
 from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.impute import SimpleImputer
-from sklearn.metrics import f1_score, roc_auc_score
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from custom_transformers import DropColumns
-from helpers import load_base_models, load_data, load_features, load_transformers
+from helpers import evaluate_pipeline, load_base_models, load_data, load_features, load_transformers
 
 num_features, cat_features = load_features()
 
@@ -105,34 +104,11 @@ for binning_enabled in [True, False]:
 			pipeline.fit(X_train, y_train)
 
 			# evaluate
-			y_pred = pipeline.predict(X_test)
-			y_prob = pipeline.predict_proba(X_test)[:, 1] if hasattr(model, 'predict_proba') else None
-			f1 = f1_score(y_test, y_pred)
-			roc_auc = roc_auc_score(y_test, y_prob) if y_prob is not None else None
-
-			mlflow.log_metric('test_f1_score', f1)
-			if roc_auc is not None:
-				mlflow.log_metric('test_roc_auc', roc_auc)
-
-			# cross-validation
-
-			# cv_f1_scores = cross_val_score(pipeline, X_train, y_train, cv=5, scoring='f1')
-			# cv_roc_auc_scores = (
-			# 	cross_val_score(pipeline, X_train, y_train, cv=5, scoring=make_scorer(roc_auc_score, needs_proba=True))
-			# 	if hasattr(model, 'predict_proba')
-			# 	else None
-			# )
-			# mean_cv_f1 = np.mean(cv_f1_scores)
-			# mean_cv_roc_auc = np.mean(cv_roc_auc_scores) if cv_roc_auc_scores is not None else None
-
-			# mlflow.log_metric('mean_cv_f1_score', mean_cv_f1)
-			# if mean_cv_roc_auc is not None:
-			# 	mlflow.log_metric('mean_cv_roc_auc_score', mean_cv_roc_auc)
-
-			# log the pipeline
-			mlflow.sklearn.log_model(pipeline, artifact_path='pipeline')
+			eval_metrics = evaluate_pipeline(
+				model_name, model, pipeline, X_train, y_train, X_test, y_test, cross_val=True, mlflow=True
+			)
 
 			print(
-				f"Logged {model_name} (Binning: {binning_enabled}) to MLflow: "
-				f"Test F1 = {f1:.4f}, Test ROC AUC = {roc_auc:.4f if roc_auc else 'N/A'}, "
+				f'Logged {model_name} (Binning: {binning_enabled}) to MLflow: '
+				f'Test F1 = {eval_metrics['f1']}, ROC AUC = {eval_metrics['roc_auc']}, '
 			)
