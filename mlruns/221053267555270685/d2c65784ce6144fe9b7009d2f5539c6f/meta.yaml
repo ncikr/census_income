@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/221053267555270685/d2c65784ce6144fe9b7009d2f5539c6f/artifacts
+end_time: 1735858200553
+entry_point_name: ''
+experiment_id: '221053267555270685'
+lifecycle_stage: active
+run_id: d2c65784ce6144fe9b7009d2f5539c6f
+run_name: RandomForest_binning_True
+run_uuid: d2c65784ce6144fe9b7009d2f5539c6f
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735858122053
+status: 3
+tags: []
+user_id: Nick

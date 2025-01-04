@@ -1,0 +1,6 @@
+artifact_location: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/221053267555270685
+creation_time: 1735857946539
+experiment_id: '221053267555270685'
+last_update_time: 1735857946539
+lifecycle_stage: active
+name: census_income_classification

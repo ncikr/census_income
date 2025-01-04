@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/221053267555270685/ac04a21bb412476eb6dc4701fa98c6bd/artifacts
+end_time: 1735881339051
+entry_point_name: ''
+experiment_id: '221053267555270685'
+lifecycle_stage: active
+run_id: ac04a21bb412476eb6dc4701fa98c6bd
+run_name: XGBoost_binning_True
+run_uuid: ac04a21bb412476eb6dc4701fa98c6bd
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735881335170
+status: 4
+tags: []
+user_id: Nick
