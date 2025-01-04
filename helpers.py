@@ -7,7 +7,7 @@ import pandas as pd
 from janitor import clean_names
 from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import auc, f1_score, make_scorer, precision_recall_curve, roc_auc_score
+from sklearn.metrics import auc, f1_score, make_scorer, precision_recall_curve, roc_auc_score, roc_curve
 from sklearn.model_selection import cross_val_score
 
 from custom_transformers import CategoricalBinning, NumericBinning
@@ -266,19 +266,18 @@ def evaluate_pipeline(model_name, model, pipeline, X_train, y_train, X_test, y_t
 	y_prob = pipeline.predict_proba(X_test)[:, 1] if hasattr(model, 'predict_proba') else None
 	f1 = f1_score(y_test, y_pred)
 	roc_auc = roc_auc_score(y_test, y_prob) if y_prob is not None else None
-	precisions, recalls, thresholds = precision_recall_curve(y_test, y_pred)
 
 	# find optimal f1
-	precisions_prob, recalls_prob, thresholds_prob = precision_recall_curve(y_test, y_prob)
-	f1_scores = 2 * (precisions_prob * recalls_prob) / (precisions_prob + recalls_prob + 1e-8)
+	precisions, recalls, thresholds = precision_recall_curve(y_test, y_prob)
+	f1_scores = 2 * (precisions * recalls) / (precisions + recalls + 1e-8)
 	optimal_idx = np.argmax(f1_scores)
-	optimal_threshold = thresholds_prob[optimal_idx]
+	optimal_threshold = thresholds[optimal_idx]
 	optimal_f1 = f1_scores[optimal_idx]
 
 	# pr curve
-	pr_auc = auc(recalls_prob, precisions_prob)
+	pr_auc = auc(recalls, precisions)
 	plt.figure()
-	plt.plot(recalls_prob, precisions_prob, label=f'PR Curve (AUC={pr_auc})')
+	plt.plot(recalls, precisions, label=f'PR Curve (AUC={pr_auc})')
 	plt.xlabel('Recall')
 	plt.ylabel('Precision')
 	plt.title('Precision-Recall Curve')
@@ -306,6 +305,12 @@ def evaluate_pipeline(model_name, model, pipeline, X_train, y_train, X_test, y_t
 		)
 	)
 
+	pr_data = dict(((data, eval(data)) for data in ('precisions', 'recalls', 'thresholds')))
+
+	fpr, tpr, _ = roc_curve(y_test, y_prob)
+
+	roc_data = dict(((data, eval(data)) for data in ('fpr', 'tpr')))
+
 	# mlflow logging
 	if mlflow:
 		mlflow.log_metric('test_f1_score', f1)
@@ -321,6 +326,9 @@ def evaluate_pipeline(model_name, model, pipeline, X_train, y_train, X_test, y_t
 
 		mlflow.log_artifact(pr_curve_path, artifact_path='plots')
 
+		mlflow.log_artifact(pr_data, artifact_path='data/pr_data')
+		mlflow.log_artifact(roc_data, artifact_path='data/roc_data')
+
 		mlflow.sklearn.log_model(pipeline, artifact_path='pipeline')
 
-	return eval_metrics
+	return eval_metrics, pr_data, roc_data

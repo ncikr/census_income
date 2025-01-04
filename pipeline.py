@@ -104,7 +104,7 @@ for binning_enabled in [True, False]:
 			pipeline.fit(X_train, y_train)
 
 			# evaluate
-			eval_metrics = evaluate_pipeline(
+			eval_metrics, pr_data, roc_data = evaluate_pipeline(
 				model_name, model, pipeline, X_train, y_train, X_test, y_test, cross_val=True, mlflow=True
 			)
 
