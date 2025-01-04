@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/221053267555270685/78b10242bb8049febb9651fb1fb35ec7/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '221053267555270685'
+lifecycle_stage: active
+run_id: 78b10242bb8049febb9651fb1fb35ec7
+run_name: SVC_binning_True
+run_uuid: 78b10242bb8049febb9651fb1fb35ec7
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735903576310
+status: 1
+tags: []
+user_id: Nick

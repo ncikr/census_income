@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/221053267555270685/e9cff1a88ac14f71beba8fbf6a4df570/artifacts
+end_time: 1735858031503
+entry_point_name: ''
+experiment_id: '221053267555270685'
+lifecycle_stage: active
+run_id: e9cff1a88ac14f71beba8fbf6a4df570
+run_name: LogisticRegression_binning_True
+run_uuid: e9cff1a88ac14f71beba8fbf6a4df570
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1735858011119
+status: 4
+tags: []
+user_id: Nick
