@@ -14,7 +14,25 @@ from sklearn.model_selection import cross_val_score
 from custom_transformers import CategoricalBinning, NumericBinning
 
 
-def load_data(data_filepath, metadata_filepath, num_features, cat_features):
+def load_clean_data(data_filepath, metadata_filepath, num_features, cat_features):
+    """
+    Loads and cleans the dataset, preparing it for modeling.
+
+    Args:
+        data_filepath (str): Path to the dataset file.
+        metadata_filepath (str): Path to the metadata file containing column descriptions.
+        num_features (list of str): List of numerical feature names.
+        cat_features (list of str): List of categorical feature names.
+
+    Returns:
+        tuple: A tuple (X, Y) where:
+            - X (pd.DataFrame): Features after cleaning and preprocessing.
+            - Y (pd.Series): Target variable (`income_threshold`).
+
+    Raises:
+        FileNotFoundError: If the specified data or metadata file does not exist.
+        ValueError: If feature names cannot be extracted from metadata.
+    """
     # load feature names from metadata
     metadata_file = open(metadata_filepath, 'r')
     metadata_lines = metadata_file.readlines()
@@ -43,6 +61,14 @@ def load_data(data_filepath, metadata_filepath, num_features, cat_features):
 
 
 def load_features():
+    """
+    Defines numerical and categorical features for the dataset.
+
+    Returns:
+        tuple: A tuple (num_features, cat_features) where:
+            - num_features (list of str): List of numerical feature names.
+            - cat_features (list of str): List of categorical feature names.
+    """
     num_features = [
         'age',
         'wage_per_hour',
@@ -91,6 +117,12 @@ def load_features():
 
 
 def load_transformers():
+    """
+    Loads feature transformers for binning numerical and categorical variables.
+
+    Returns:
+        dict: A dictionary of transformers, where each key is a feature name and the value is a transformer object.
+    """
     transformers = dict()
 
     # numerical transformers
@@ -248,6 +280,12 @@ def load_transformers():
 
 
 def load_base_models():
+    """
+    Loads base machine learning models for binary classification.
+
+    Returns:
+        dict: A dictionary of models, where each key is the model name and the value is a scikit-learn model object.
+    """
     models = {
         'LogisticRegression': LogisticRegression(max_iter=1000, random_state=42),
         'RandomForest': RandomForestClassifier(random_state=42),
@@ -262,6 +300,33 @@ def load_base_models():
 def evaluate_pipeline(
     model_name, model, pipeline, X_train, y_train, X_test, y_test, cross_val=False, mlflow_logging=True
 ):
+    """
+    Evaluates a machine learning pipeline, computing metrics and generating plots.
+
+    Args:
+        model_name (str): Name of the model (used for saving plots).
+        model (sklearn.base.BaseEstimator): Trained model object.
+        pipeline (sklearn.pipeline.Pipeline): Pipeline containing preprocessing and the model.
+        X_train (pd.DataFrame): Training features.
+        y_train (pd.Series): Training target.
+        X_test (pd.DataFrame): Testing features.
+        y_test (pd.Series): Testing target.
+        cross_val (bool, optional): Whether to perform cross-validation. Default is False.
+        mlflow_logging (bool, optional): Whether to log metrics and artifacts to MLflow. Default is True.
+
+    Returns:
+        tuple: A tuple (eval_metrics, pr_data, roc_data) where:
+            - eval_metrics (dict): Dictionary of evaluation metrics (e.g., F1, ROC-AUC).
+            - pr_data (dict): Precision-recall curve data.
+            - roc_data (dict): ROC curve data.
+
+    Saves:
+        - Precision-recall curve plot.
+        - Precision, recall, and F1 score vs. threshold plot.
+
+    Raises:
+        ValueError: If the pipeline or model is not properly fitted.
+    """
     # precision recall
     y_pred = pipeline.predict(X_test)
     y_prob = pipeline.predict_proba(X_test)[:, 1] if hasattr(model, 'predict_proba') else None
@@ -277,7 +342,7 @@ def evaluate_pipeline(
 
     # pr curve
     pr_auc = auc(recalls, precisions)
-    plt.figure()
+    plt.figure(figsize=(5, 5))
     plt.plot(recalls, precisions, label=f'PR Curve (AUC={pr_auc})')
     plt.xlabel('Recall')
     plt.ylabel('Precision')
@@ -288,7 +353,7 @@ def evaluate_pipeline(
     plt.close()
 
     # plot pr-f1 against threshold
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(5, 5))
     plt.plot(thresholds, precisions[:-1], label='Precision', color='blue')
     plt.plot(thresholds, recalls[:-1], label='Recall', color='green')
     plt.plot(thresholds, f1_scores[:-1], label='F1 Score', color='red')
