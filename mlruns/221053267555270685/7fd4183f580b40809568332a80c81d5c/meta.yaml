@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/221053267555270685/7fd4183f580b40809568332a80c81d5c/artifacts
+end_time: 1736012828163
+entry_point_name: ''
+experiment_id: '221053267555270685'
+lifecycle_stage: active
+run_id: 7fd4183f580b40809568332a80c81d5c
+run_name: GradientBoosting_binning_True_SMOTE_False
+run_uuid: 7fd4183f580b40809568332a80c81d5c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1736012011267
+status: 3
+tags: []
+user_id: Nick

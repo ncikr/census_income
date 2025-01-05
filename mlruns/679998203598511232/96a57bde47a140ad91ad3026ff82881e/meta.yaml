@@ -1,0 +1,16 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/679998203598511232/96a57bde47a140ad91ad3026ff82881e/artifacts
+deleted_time: 1736080728264
+end_time: null
+entry_point_name: ''
+experiment_id: '679998203598511232'
+lifecycle_stage: deleted
+run_id: 96a57bde47a140ad91ad3026ff82881e
+run_name: GradientBoosting_binning_False_SMOTE_True
+run_uuid: 96a57bde47a140ad91ad3026ff82881e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1736077007692
+status: 1
+tags: []
+user_id: Nick

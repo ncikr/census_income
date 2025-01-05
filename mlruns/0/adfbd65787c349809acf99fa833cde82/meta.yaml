@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/0/adfbd65787c349809acf99fa833cde82/artifacts
+end_time: 1736020500428
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: adfbd65787c349809acf99fa833cde82
+run_name: rogue-skink-264
+run_uuid: adfbd65787c349809acf99fa833cde82
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1736019169418
+status: 3
+tags: []
+user_id: Nick

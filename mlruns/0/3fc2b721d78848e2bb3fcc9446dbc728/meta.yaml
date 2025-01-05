@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/0/3fc2b721d78848e2bb3fcc9446dbc728/artifacts
+end_time: 1736023514018
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 3fc2b721d78848e2bb3fcc9446dbc728
+run_name: sincere-wren-501
+run_uuid: 3fc2b721d78848e2bb3fcc9446dbc728
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1736022024106
+status: 3
+tags: []
+user_id: Nick

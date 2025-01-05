@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/0/c79e556a85c8426380c3c3f82d4e76b0/artifacts
+end_time: 1736021512736
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: c79e556a85c8426380c3c3f82d4e76b0
+run_name: beautiful-duck-364
+run_uuid: c79e556a85c8426380c3c3f82d4e76b0
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1736020500445
+status: 3
+tags: []
+user_id: Nick

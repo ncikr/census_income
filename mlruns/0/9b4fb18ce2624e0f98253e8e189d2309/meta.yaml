@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/0/9b4fb18ce2624e0f98253e8e189d2309/artifacts
+end_time: 1736033452419
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 9b4fb18ce2624e0f98253e8e189d2309
+run_name: tasteful-seal-156
+run_uuid: 9b4fb18ce2624e0f98253e8e189d2309
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1736031570419
+status: 3
+tags: []
+user_id: Nick

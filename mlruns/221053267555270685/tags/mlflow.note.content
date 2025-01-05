@@ -1,0 +1,1 @@
+Predicting the binary income class based on demographic data from the US census 1994-95. Evaulating with and without binning preprocessing and SMOTE resampling.
