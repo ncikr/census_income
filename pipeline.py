@@ -10,6 +10,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from custom_transformers import DropColumns
 from helpers import evaluate_pipeline, load_base_models, load_data, load_features, load_transformers
 
+# load data
 num_features, cat_features = load_features()
 
 X_train, y_train = load_data(
@@ -71,11 +72,12 @@ passthrough = ColumnTransformer(
     verbose_feature_names_out=False,  # to enable binning afterwards
 )
 
-mlflow.set_experiment('census_income_classification')
+mlflow.set_experiment('census_income_classification_final')
 
 # load models to test
 models = load_base_models()
 
+# initialise dicts for pr and roc data
 pr_data_models = {}
 roc_data_models = {}
 
@@ -112,6 +114,7 @@ for smote_enabled in [True, False]:
                     model_name, model, pipeline, X_train, y_train, X_test, y_test, cross_val=True, mlflow_logging=True
                 )
 
+                # save pr and roc data for further analysis
                 pr_data_models[run_name] = pr_data
                 roc_data_models[run_name] = roc_data
 

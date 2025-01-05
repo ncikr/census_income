@@ -287,6 +287,20 @@ def evaluate_pipeline(
     plt.savefig(pr_curve_path)
     plt.close()
 
+    # plot pr-f1 against threshold
+    plt.figure(figsize=(10, 6))
+    plt.plot(thresholds, precisions[:-1], label='Precision', color='blue')
+    plt.plot(thresholds, recalls[:-1], label='Recall', color='green')
+    plt.plot(thresholds, f1_scores[:-1], label='F1 Score', color='red')
+    plt.xlabel('Threshold')
+    plt.ylabel('Score')
+    plt.title('Precision, Recall, and F1 Score vs. Threshold')
+    plt.legend(loc='best')
+    plt.grid(True)
+    pr_threshold_path = f'./plots/pr_threshold_plot_{model_name}.png'
+    plt.savefig(pr_threshold_path)
+    plt.close()
+
     # cross-validation
     if cross_val:
         cv_f1_scores = cross_val_score(pipeline, X_train, y_train, cv=3, scoring='f1')
@@ -297,6 +311,9 @@ def evaluate_pipeline(
         )
         mean_cv_f1 = np.mean(cv_f1_scores)
         mean_cv_roc_auc = np.mean(cv_roc_auc_scores) if cv_roc_auc_scores is not None else None
+    else:
+        mean_cv_f1 = None
+        mean_cv_roc_auc = None
 
     # save metrics in dictionaries
     eval_metrics = {
@@ -328,6 +345,7 @@ def evaluate_pipeline(
             mlflow.log_metric('mean_cv_roc_auc', mean_cv_roc_auc)
 
         mlflow.log_artifact(pr_curve_path, artifact_path='plots')
+        mlflow.log_artifact(pr_threshold_path, artifact_path='plots')
 
         mlflow.sklearn.log_model(pipeline, artifact_path='pipeline')
 
