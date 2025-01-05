@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/221053267555270685/097ce73b2d564ad8ad0de821f161c686/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '221053267555270685'
+lifecycle_stage: active
+run_id: 097ce73b2d564ad8ad0de821f161c686
+run_name: SMOTE_Optuna_HPO
+run_uuid: 097ce73b2d564ad8ad0de821f161c686
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1736018110033
+status: 1
+tags: []
+user_id: Nick

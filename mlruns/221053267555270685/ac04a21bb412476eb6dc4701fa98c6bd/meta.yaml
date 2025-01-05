@@ -1,8 +1,9 @@
 artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/221053267555270685/ac04a21bb412476eb6dc4701fa98c6bd/artifacts
+deleted_time: 1736005825442
 end_time: 1735881339051
 entry_point_name: ''
 experiment_id: '221053267555270685'
-lifecycle_stage: active
+lifecycle_stage: deleted
 run_id: ac04a21bb412476eb6dc4701fa98c6bd
 run_name: XGBoost_binning_True
 run_uuid: ac04a21bb412476eb6dc4701fa98c6bd

@@ -1,8 +1,9 @@
 artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/221053267555270685/e9cff1a88ac14f71beba8fbf6a4df570/artifacts
+deleted_time: 1736005825447
 end_time: 1735858031503
 entry_point_name: ''
 experiment_id: '221053267555270685'
-lifecycle_stage: active
+lifecycle_stage: deleted
 run_id: e9cff1a88ac14f71beba8fbf6a4df570
 run_name: LogisticRegression_binning_True
 run_uuid: e9cff1a88ac14f71beba8fbf6a4df570

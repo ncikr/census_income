@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/0/4782172c5734423f8f577c57a269442e/artifacts
+end_time: 1736019169401
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 4782172c5734423f8f577c57a269442e
+run_name: fearless-kite-357
+run_uuid: 4782172c5734423f8f577c57a269442e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1736018166167
+status: 3
+tags: []
+user_id: Nick

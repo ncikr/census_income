@@ -1,3 +1,6 @@
 data
 tmp
+__pycache__
+
+ # prevent model files pushed to github
 *.pkl

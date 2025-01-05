@@ -1,0 +1,15 @@
+artifact_uri: file:///c:/Users/Nick/Documents/Python/census_income/mlruns/0/47c4cd09facb42ef81c334e943d55591/artifacts
+end_time: 1736031570373
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 47c4cd09facb42ef81c334e943d55591
+run_name: peaceful-crow-900
+run_uuid: 47c4cd09facb42ef81c334e943d55591
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1736030126363
+status: 3
+tags: []
+user_id: Nick
